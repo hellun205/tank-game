@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Camera;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -62,6 +63,8 @@ namespace Tank {
       spriteRenderers.Add(TankChildrens.RightWheel, rightWheel.GetComponent<SpriteRenderer>());
       
       SetBulletMaxCount(bulletMaxCount);
+
+      MainCameraController.Instance.target = transform;
     }
 
     private void Update() {
