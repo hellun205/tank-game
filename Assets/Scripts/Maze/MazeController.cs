@@ -49,8 +49,12 @@ namespace Maze {
 
     public void Next() {
       IEnumerator StartAnim() {
-        yield return new WaitForSeconds(1.2f);
-        EffectController.Instance.Effect(Effects.FadeOut, callBack: () => Move(currentIndex + 1));
+        yield return new WaitForSeconds(0.7f);
+        EffectController.Instance.Effect(Effects.FadeOut, callBack: () => {
+          if (currentIndex < rooms.Length) {
+            Move(currentIndex + 1);
+          }
+        });
       }
 
       StartCoroutine(StartAnim());
