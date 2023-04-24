@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Effect;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Maze {
   public class MazeController : MonoBehaviour {
@@ -11,6 +14,8 @@ namespace Maze {
     public Tank.Tank tank;
 
     public Room[] rooms;
+
+    public Information[] informations;
 
     public int currentIndex { get; private set; }
 
@@ -33,6 +38,7 @@ namespace Maze {
       EffectController.Instance.Black();
       AllDisable();
       currentIndex = index;
+      SetText(InfoType.Stage, $"Stage: {currentIndex + 1}");
       var room = GetCurrentRoom();
       room.Tilemap.gameObject.SetActive(true);
       tank.transform.SetPositionAndRotation(room.Tilemap.CellToWorld(room.StartPosition) + new Vector3(0.5f, 0.5f, 0f),
@@ -51,13 +57,21 @@ namespace Maze {
       IEnumerator StartAnim() {
         yield return new WaitForSeconds(0.7f);
         EffectController.Instance.Effect(Effects.FadeOut, callBack: () => {
-          if (currentIndex < rooms.Length) {
+          if (currentIndex + 1 < rooms.Length) {
             Move(currentIndex + 1);
+          } else {
+            SceneManager.LoadScene("End");
           }
         });
       }
 
       StartCoroutine(StartAnim());
+    }
+
+    public void SetText(InfoType type, string text) {
+      var info = informations.FirstOrDefault(x => x.Type == type);
+
+      if (info.TMP != null) info.TMP.SetText(text);
     }
   }
 }
