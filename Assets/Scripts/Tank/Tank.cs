@@ -67,9 +67,12 @@ namespace Tank {
       MainCameraController.Instance.target = transform;
     }
 
-    private void Update() {
+    private void FixedUpdate() {
       MovingUpdate();
       AnimationUpdate();
+    }
+
+    private void Update() {
       ShootingUpdate();
     }
 

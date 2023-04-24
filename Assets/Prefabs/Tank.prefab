@@ -199,12 +199,14 @@ MonoBehaviour:
   leftWheel: {fileID: 6281901481849636413}
   rightWheel: {fileID: 6281901482222452006}
   head: {fileID: 6281901482168057532}
-  moveSpeed: 3
+  moveSpeed: 2
   rotateSpeed: 125
   fireKey: 32
   bulletObject: {fileID: 4678474034535720471, guid: c8aaae86f37f18e43b1dc6fff9b6ab25, type: 3}
   bulletMaxCount: 7
   bulletStartPosition: {fileID: 1534077466}
+  bulletSpeed: 3
+  bulletDamage: 1
 --- !u!50 &296994886
 Rigidbody2D:
   serializedVersion: 4
@@ -213,7 +215,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6281901480928706143}
-  m_BodyType: 2
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0

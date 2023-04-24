@@ -18,7 +18,6 @@ namespace Tank {
     }
 
     private void OnTriggerExit2D(Collider2D other) {
-      Debug.Log(other.tag);
       if (other.tag == "Bullet") {
         var bullet = other.GetComponent<Bullet>();
         
