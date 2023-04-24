@@ -101,7 +101,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 1
   speed: 4
-  damageableTags: []
+  damageableTags:
+  - Tile
 --- !u!58 &4678474034535720470
 CircleCollider2D:
   m_ObjectHideFlags: 0

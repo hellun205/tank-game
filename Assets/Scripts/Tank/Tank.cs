@@ -3,8 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Camera;
+using Effect;
+using Maze;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.Tilemaps;
 
 namespace Tank {
   public class Tank : MonoBehaviour {
@@ -27,6 +30,9 @@ namespace Tank {
 
     [SerializeField]
     private KeyCode fireKey = KeyCode.Space;
+    
+    [SerializeField]
+    private KeyCode warpKey = KeyCode.Space;
     
     [Header("Bullet Setting")]
     [SerializeField]
@@ -52,6 +58,8 @@ namespace Tank {
 
     private List<Bullet> bullets = new();
 
+    public bool canWarp = true;
+
     private int canShootCount => bullets.Count(x => x.AbleToShoot);
 
     private void Awake() {
@@ -63,8 +71,14 @@ namespace Tank {
       spriteRenderers.Add(TankChildrens.RightWheel, rightWheel.GetComponent<SpriteRenderer>());
       
       SetBulletMaxCount(bulletMaxCount);
+    }
 
+    private void Start() {
       MainCameraController.Instance.target = transform;
+      MazeController.Instance.tank = this;
+      
+      MazeController.Instance.Move(0);
+      EffectController.Instance.Black();
     }
 
     private void FixedUpdate() {
@@ -74,6 +88,7 @@ namespace Tank {
 
     private void Update() {
       ShootingUpdate();
+      WarpUpdate();
     }
 
     private void MovingUpdate() {
@@ -100,11 +115,23 @@ namespace Tank {
     }
 
     private void ShootingUpdate() {
-      if (Input.GetKeyDown(fireKey) && canShootCount > 0) {
+      if (!Input.GetKeyDown(fireKey)) return;
+      
+      if (canShootCount > 0) {
         var bullet = bullets.FirstOrDefault(x => x.AbleToShoot);
         
         ResetBullet(bullet);
         bullet.Enable();
+      }
+    }
+
+    private void WarpUpdate() {
+      if (!Input.GetKeyDown(warpKey)) return;
+      var room = MazeController.Instance.GetCurrentRoom();
+      
+      if (canWarp && room.Tilemap.WorldToCell(transform.position) == room.EndPosition) {
+        canWarp = false;
+        MazeController.Instance.Next();
       }
     }
 
