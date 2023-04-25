@@ -1,14 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Camera;
-using Effect;
-using Maze;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.Tilemaps;
-using UnityEngine.UI;
 
 namespace Tank {
   public class Tank : MonoBehaviour {
@@ -151,7 +143,6 @@ namespace Tank {
     protected void OnCollisionEnter2D(Collision2D col) {
       if (col.gameObject.tag == "Bullet" && !bullets.Contains(col.gameObject.GetComponent<Bullet>())) {
         hp -= col.gameObject.GetComponent<Bullet>().damage;
-        Debug.Log(hp);
       }
     }
 
@@ -169,7 +160,6 @@ namespace Tank {
         try {
           Destroy(obj.gameObject);
         } catch {
-          
         }
       }
     }

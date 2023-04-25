@@ -42,6 +42,7 @@ namespace Tank {
         currentMoveSpeed = moveSpeed;
         // currentRotateSpeed = rotateSpeed * Input.GetAxisRaw("Horizontal");
         
+        // 플레이어 쫓기 (회전)
         angle = Mathf.Atan2(Player.Instance.transform.position.y - transform.position.y,
                   Player.Instance.transform.position.x - transform.position.x)
                 * Mathf.Rad2Deg;
