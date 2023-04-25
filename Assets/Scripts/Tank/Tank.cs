@@ -13,56 +13,54 @@ namespace Tank {
   public class Tank : MonoBehaviour {
     [Header("Childrens Setting")]
     [SerializeField]
-    private GameObject leftWheel;
+    protected GameObject leftWheel;
 
     [SerializeField]
-    private GameObject rightWheel;
+    protected GameObject rightWheel;
 
     [SerializeField]
-    private GameObject head;
+    protected GameObject head;
     
     [Header("Tank Setting")]
     [SerializeField]
-    private float moveSpeed = 3f;
+    protected float moveSpeed = 3f;
 
-    [SerializeField]
-    private float rotateSpeed = 50f;
-
-    [SerializeField]
-    private KeyCode fireKey = KeyCode.Space;
-    
-    [SerializeField]
-    private KeyCode warpKey = KeyCode.Space;
-    
     [Header("Bullet Setting")]
     [SerializeField]
-    private Bullet bulletObject;
+    protected Bullet bulletObject;
     
     [SerializeField]
-    private int bulletMaxCount = 5;
+    protected int bulletMaxCount = 5;
 
     [SerializeField]
-    private Transform bulletStartPosition;
+    protected Transform bulletStartPosition;
 
     [SerializeField]
-    private float bulletSpeed = 3f;
+    protected float bulletSpeed = 3f;
     
     [SerializeField]
-    private int bulletDamage = 1;
+    protected int bulletDamage = 1;
 
-    private Dictionary<TankChildrens, Animator> animators = new();
-    private Dictionary<TankChildrens, SpriteRenderer> spriteRenderers = new();
+    protected Dictionary<TankChildrens, Animator> animators = new();
+    protected Dictionary<TankChildrens, SpriteRenderer> spriteRenderers = new();
     
-    private float currentMoveSpeed = 0f;
-    private float currentRotateSpeed = 0f;
+    protected float currentMoveSpeed = 0f;
+    protected float currentRotateSpeed = 0f;
 
-    private List<Bullet> bullets = new();
+    protected List<Bullet> bullets = new();
 
-    public bool canWarp = true;
+    public int maxHp = 10;
 
-    private int canShootCount => bullets.Count(x => x.AbleToShoot);
+    public int hp;
+    
 
-    private void Awake() {
+    protected int CanShootCount => bullets.Count(x => x.AbleToShoot);
+
+    private Rigidbody2D rb;
+
+    protected void Awake() {
+      rb = GetComponent<Rigidbody2D>();
+      hp = maxHp;
       animators.Add(TankChildrens.LeftWheel, leftWheel.GetComponent<Animator>());
       animators.Add(TankChildrens.RightWheel, rightWheel.GetComponent<Animator>());
       spriteRenderers.Add(TankChildrens.Body, gameObject.GetComponent<SpriteRenderer>());
@@ -73,30 +71,14 @@ namespace Tank {
       SetBulletMaxCount(bulletMaxCount);
     }
 
-    private void Start() {
-      MainCameraController.Instance.target = transform;
-      MazeController.Instance.tank = this;
-      
-      MazeController.Instance.Move(0);
-      EffectController.Instance.Black();
+    protected void Start() {
     }
 
-    private void FixedUpdate() {
-      MovingUpdate();
+    protected void FixedUpdate() {
       AnimationUpdate();
     }
 
-    private void Update() {
-      ShootingUpdate();
-      WarpUpdate();
-    }
-
-    private void MovingUpdate() {
-      currentMoveSpeed = moveSpeed * Input.GetAxisRaw("Vertical");
-      currentRotateSpeed = rotateSpeed * Input.GetAxisRaw("Horizontal");
-
-      transform.Translate(Vector3.up * currentMoveSpeed * Time.deltaTime);
-      transform.Rotate(0f, 0f, -currentRotateSpeed * Time.deltaTime);
+    protected void Update() {
     }
 
     private void AnimationUpdate() {
@@ -114,28 +96,9 @@ namespace Tank {
       }
     }
 
-    private void ShootingUpdate() {
-      if (!Input.GetKeyDown(fireKey)) return;
-      
-      if (canShootCount > 0) {
-        var bullet = bullets.FirstOrDefault(x => x.AbleToShoot);
-        
-        ResetBullet(bullet);
-        bullet.Enable();
-      }
-    }
+   
 
-    private void WarpUpdate() {
-      if (!Input.GetKeyDown(warpKey)) return;
-      var room = MazeController.Instance.GetCurrentRoom();
-      
-      if (canWarp && room.Tilemap.WorldToCell(transform.position) == room.EndPosition) {
-        canWarp = false;
-        MazeController.Instance.Next();
-      }
-    }
-
-    private void SetDirection(TankChildrens type, int value) => animators[type].SetInteger("Direction", value);
+    protected void SetDirection(TankChildrens type, int value) => animators[type].SetInteger("Direction", value);
 
     public void SetColor(TankChildrens type, Color color) {
       switch (type) {
@@ -176,8 +139,30 @@ namespace Tank {
       }
     }
 
-    private void ResetBullet(Bullet bullet) {
+    protected void ResetBullet(Bullet bullet) {
       bullet.SetPosition(bulletStartPosition.position, transform.rotation);
+    }
+
+    protected void OnCollisionEnter2D(Collision2D col) {
+      if (col.gameObject.tag == "Bullet" && !bullets.Contains(col.gameObject.GetComponent<Bullet>())) {
+        hp -= col.gameObject.GetComponent<Bullet>().damage;
+        Debug.Log(hp);
+      }
+    }
+
+    protected void Fire() {
+      if (CanShootCount > 0) {
+        var bullet = bullets.FirstOrDefault(x => x.AbleToShoot);
+        
+        ResetBullet(bullet);
+        bullet.Enable();
+      }
+    }
+
+    protected void OnDestroy() {
+      foreach (var obj in bullets) {
+        Destroy(obj.gameObject);
+      }
     }
   }
 }

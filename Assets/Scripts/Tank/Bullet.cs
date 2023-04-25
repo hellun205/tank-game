@@ -4,21 +4,13 @@ using UnityEngine;
 
 namespace Tank {
   public class Bullet : MonoBehaviour {
-    public delegate void _onDisabled(Bullet sender);
-
-    public delegate void _onEnabled(Bullet sender);
-
-    public event _onDisabled OnDisabled;
-
-    public event _onEnabled OnEnabled;
-    
     public int damage = 1;
     public float speed = 2f;
     public string[] damageableTags;
 
-    public bool AbleToShoot => !isShooting;
+    public bool AbleToShoot => !IsShooting;
 
-    public bool isShooting { get; private set; } = false;
+    public bool IsShooting { get; private set; } = false;
 
     private CircleCollider2D circleCol2D;
     private SpriteRenderer sr;
@@ -29,7 +21,7 @@ namespace Tank {
     }
 
     private void Update() {
-      if (isShooting) {
+      if (IsShooting) {
         transform.Translate(Vector3.up * speed * Time.deltaTime);
       }
     }
@@ -41,15 +33,13 @@ namespace Tank {
     }
 
     public void Disable() {
-      OnDisabled?.Invoke(this);
-      isShooting = false;
+      IsShooting = false;
       circleCol2D.enabled = false;
       sr.enabled = false;
     }
 
     public void Enable() {
-      OnEnabled?.Invoke(this);
-      isShooting = true;
+      IsShooting = true;
       circleCol2D.enabled = true;
       sr.enabled = true;
     }

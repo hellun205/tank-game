@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Effect;
+using Tank;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,7 +12,7 @@ namespace Maze {
   public class MazeController : MonoBehaviour {
     public static MazeController Instance { get; private set; }
 
-    public Tank.Tank tank;
+    public Player tank;
 
     public Room[] rooms;
 

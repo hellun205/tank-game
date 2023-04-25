@@ -104,10 +104,10 @@ GameObject:
   - component: {fileID: 6281901480928706140}
   - component: {fileID: 296994886}
   - component: {fileID: 296994885}
-  - component: {fileID: -6805391499215662666}
+  - component: {fileID: 5248606351697237272}
   m_Layer: 0
-  m_Name: Tank
-  m_TagString: Player
+  m_Name: EnemyTank
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -174,7 +174,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 99308c5b778aa0e47a0c77c11a3ffbe6, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -231,7 +231,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5.0549526, y: 4.0961957}
   m_EdgeRadius: 0
---- !u!114 &-6805391499215662666
+--- !u!114 &5248606351697237272
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -240,23 +240,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 6281901480928706143}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd2788a779924896b07394c445746abd, type: 3}
+  m_Script: {fileID: 11500000, guid: 21267e47b13f406089ff58ffc0e57d3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   leftWheel: {fileID: 6281901481849636413}
   rightWheel: {fileID: 6281901482222452006}
   head: {fileID: 6281901482168057532}
-  moveSpeed: 2.5
+  moveSpeed: 0.2
   bulletObject: {fileID: 4678474034535720471, guid: c8aaae86f37f18e43b1dc6fff9b6ab25, type: 3}
-  bulletMaxCount: 5
+  bulletMaxCount: 1
   bulletStartPosition: {fileID: 1534077466}
-  bulletSpeed: 7
+  bulletSpeed: 2
   bulletDamage: 1
-  maxHp: 15
-  rotateSpeed: 125
-  fireKey: 32
-  warpKey: 32
-  canWarp: 1
+  maxHp: 4
+  hp: 0
+  isEnabled: 0
+  fireSecond: 5
 --- !u!1 &6281901481849636413
 GameObject:
   m_ObjectHideFlags: 0
