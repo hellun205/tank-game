@@ -9,7 +9,7 @@ namespace Tank {
     private void Start() {
       foreach (var anim in animators) {
         anim.SetInteger("Direction", 1);
-        anim.SetFloat("Speed", 5f);
+        anim.SetFloat("Speed", 3f);
       }
     }
   }
