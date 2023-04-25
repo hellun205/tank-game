@@ -65,8 +65,8 @@ namespace Tank {
 
     private void WarpUpdate() {
       if (!Input.GetKeyDown(warpKey)) return;
-      var room = MazeController.Instance.GetCurrentRoom();
       
+      var room = MazeController.Instance.GetCurrentRoom();
       if (canWarp && room.Tilemap.WorldToCell(transform.position) == room.EndPosition) {
         canWarp = false;
         MazeController.Instance.Next();
