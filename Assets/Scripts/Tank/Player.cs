@@ -2,6 +2,7 @@
 using Effect;
 using Maze;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Tank {
@@ -77,7 +78,7 @@ namespace Tank {
       
       hpBar.fillAmount = (float)Hp / maxHp;
       if (Hp <= 0) {
-        Debug.Log("dead");
+        SceneManager.LoadScene("Gameover");
       }
     }
 
