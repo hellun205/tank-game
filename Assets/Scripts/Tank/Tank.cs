@@ -8,6 +8,7 @@ using Maze;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 namespace Tank {
   public class Tank : MonoBehaviour {
@@ -20,7 +21,7 @@ namespace Tank {
 
     [SerializeField]
     protected GameObject head;
-    
+
     [Header("Tank Setting")]
     [SerializeField]
     protected float moveSpeed = 3f;
@@ -28,7 +29,7 @@ namespace Tank {
     [Header("Bullet Setting")]
     [SerializeField]
     protected Bullet bulletObject;
-    
+
     [SerializeField]
     protected int bulletMaxCount = 5;
 
@@ -37,13 +38,13 @@ namespace Tank {
 
     [SerializeField]
     protected float bulletSpeed = 3f;
-    
+
     [SerializeField]
     protected int bulletDamage = 1;
 
     protected Dictionary<TankChildrens, Animator> animators = new();
     protected Dictionary<TankChildrens, SpriteRenderer> spriteRenderers = new();
-    
+
     protected float currentMoveSpeed = 0f;
     protected float currentRotateSpeed = 0f;
 
@@ -51,8 +52,12 @@ namespace Tank {
 
     public int maxHp = 10;
 
-    public int hp;
-    
+    private int hp;
+
+    public virtual int Hp {
+      get => hp;
+      set => hp = value;
+    }
 
     protected int CanShootCount => bullets.Count(x => x.AbleToShoot);
 
@@ -67,7 +72,7 @@ namespace Tank {
       spriteRenderers.Add(TankChildrens.Head, head.GetComponent<SpriteRenderer>());
       spriteRenderers.Add(TankChildrens.LeftWheel, leftWheel.GetComponent<SpriteRenderer>());
       spriteRenderers.Add(TankChildrens.RightWheel, rightWheel.GetComponent<SpriteRenderer>());
-      
+
       SetBulletMaxCount(bulletMaxCount);
     }
 
@@ -91,12 +96,11 @@ namespace Tank {
         SetDirection(TankChildrens.LeftWheel, -1);
         SetDirection(TankChildrens.RightWheel, 1);
       } else {
-        SetDirection(TankChildrens.LeftWheel, (int) currentMoveSpeed);
-        SetDirection(TankChildrens.RightWheel, (int) currentMoveSpeed);
+        SetDirection(TankChildrens.LeftWheel, (int)currentMoveSpeed);
+        SetDirection(TankChildrens.RightWheel, (int)currentMoveSpeed);
       }
     }
 
-   
 
     protected void SetDirection(TankChildrens type, int value) => animators[type].SetInteger("Direction", value);
 
@@ -125,6 +129,7 @@ namespace Tank {
         foreach (var bullet in bullets) {
           Destroy(bullet.gameObject);
         }
+
         bullets.Clear();
       }
 
@@ -153,7 +158,7 @@ namespace Tank {
     protected void Fire() {
       if (CanShootCount > 0) {
         var bullet = bullets.FirstOrDefault(x => x.AbleToShoot);
-        
+
         ResetBullet(bullet);
         bullet.Enable();
       }

@@ -17,7 +17,6 @@ namespace Maze {
         if(!tm.HasTile(pos)) continue;
         
         var tile = tm.GetTile<TileBase>(pos);
-        Debug.Log(tile.name);
         if (tile.name == "spawn_enemy") {
           Instantiate(enemy, tm.CellToWorld(pos), enemy.transform.rotation);
         }

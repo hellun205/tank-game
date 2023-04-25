@@ -67,7 +67,7 @@ namespace Tank {
     private void OnCollisionEnter2D(Collision2D col) {
       base.OnCollisionEnter2D(col);
       
-      if (hp <= 0) {
+      if (Hp <= 0) {
         Destroy(gameObject);
       }
     }

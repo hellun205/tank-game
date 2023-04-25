@@ -1,10 +1,8 @@
-﻿using System;
-using System.Linq;
-using Camera;
+﻿using Camera;
 using Effect;
 using Maze;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Tank {
   public class Player: Tank {
@@ -20,6 +18,11 @@ namespace Tank {
     private KeyCode warpKey = KeyCode.Space;
     
     public bool canWarp = true;
+    
+    [Header("Information")]
+    [SerializeField]
+    private Image hpBar;
+    
 
     private void Awake() {
       base.Awake();
@@ -71,7 +74,9 @@ namespace Tank {
 
     private void OnCollisionEnter2D(Collision2D other) {
       base.OnCollisionEnter2D(other);
-      if (hp <= 0) {
+      
+      hpBar.fillAmount = (float)Hp / maxHp;
+      if (Hp <= 0) {
         Debug.Log("dead");
       }
     }
