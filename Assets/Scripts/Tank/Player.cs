@@ -79,6 +79,9 @@ namespace Tank {
       hpBar.fillAmount = (float)Hp / maxHp;
       if (Hp <= 0) {
         SceneManager.LoadScene("Gameover");
+        Player.Instance = null;
+        MazeController.Instance = null;
+        EffectController.Instance = null;
       }
     }
 

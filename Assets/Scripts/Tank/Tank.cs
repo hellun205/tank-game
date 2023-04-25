@@ -166,7 +166,11 @@ namespace Tank {
 
     protected void OnDestroy() {
       foreach (var obj in bullets) {
-        Destroy(obj.gameObject);
+        try {
+          Destroy(obj.gameObject);
+        } catch {
+          
+        }
       }
     }
   }

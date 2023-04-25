@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Effect {
   public class EffectController : MonoBehaviour {
-    public static EffectController Instance { get; private set; }
+    public static EffectController Instance { get; set; }
 
     public Image image;
 

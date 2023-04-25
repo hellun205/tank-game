@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 
 namespace Maze {
   public class MazeController : MonoBehaviour {
-    public static MazeController Instance { get; private set; }
+    public static MazeController Instance { get; set; }
 
     public Player tank;
 

@@ -26,8 +26,8 @@ namespace Tank {
       }
     }
 
-    private void OnTriggerEnter2D(Collider2D col) {
-      if (damageableTags.Contains(col.tag)) {
+    private void OnCollisionStay2D(Collision2D col) {
+      if (damageableTags.Contains(col.gameObject.tag)) {
         Disable();
       }
     }
