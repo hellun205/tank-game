@@ -1,87 +1,86 @@
 ﻿using Camera;
-using Effect;
+using ScreenEffect;
 using Maze;
+using Scene;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Tank {
-  public class Player: Tank {
-    public static Player Instance { get; private set; }
-    
+  public class Player : Tank {
+    public static Player instance { get; private set; }
+
     [SerializeField]
-    protected float rotateSpeed = 50f;
-    
+    protected float _rotateSpeed = 50f;
+
     [SerializeField]
-    private KeyCode fireKey = KeyCode.Space;
-    
+    private KeyCode _fireKey = KeyCode.Space;
+
     [SerializeField]
     private KeyCode warpKey = KeyCode.Space;
-    
+
     public bool canWarp = true;
-    
+
     [Header("Information")]
     [SerializeField]
     private Image hpBar;
-    
+
 
     private void Awake() {
       base.Awake();
-      if (Instance == null) Instance = this;
+      if (instance == null) instance = this;
       else Destroy(gameObject);
     }
 
     private void Start() {
       base.Start();
-      MainCameraController.Instance.target = transform;
-      MazeController.Instance.tank = this;
-      
-      MazeController.Instance.Move(0);
-      EffectController.Instance.Black();
+      MainCameraController.instance.target = transform;
+      // ScreenEffectController.ShowEffect(new Effect(EffectType.ImmediatelyOut));
+      MazeController.instance.tank = this;
+      MazeController.instance.Move(0);
     }
 
     private void FixedUpdate() {
       base.FixedUpdate();
       MovingUpdate();
     }
-    
+
     private void Update() {
       base.Update();
       ShootingUpdate();
       WarpUpdate();
     }
-    
+
     private void MovingUpdate() {
       currentMoveSpeed = moveSpeed * Input.GetAxisRaw("Vertical");
-      currentRotateSpeed = rotateSpeed * Input.GetAxisRaw("Horizontal");
+      currentRotateSpeed = _rotateSpeed * Input.GetAxisRaw("Horizontal");
 
       transform.Translate(Vector3.up * currentMoveSpeed * Time.deltaTime);
       transform.Rotate(0f, 0f, -currentRotateSpeed * Time.deltaTime);
     }
-    
+
     private void ShootingUpdate() {
-      if (Input.GetKeyDown(fireKey)) Fire();
+      if (Input.GetKeyDown(_fireKey)) Fire();
     }
 
     private void WarpUpdate() {
       if (!Input.GetKeyDown(warpKey)) return;
-      
-      var room = MazeController.Instance.GetCurrentRoom();
+
+      var room = MazeController.instance.GetCurrentRoom();
       if (canWarp && room.Tilemap.WorldToCell(transform.position) == room.EndPosition) {
         canWarp = false;
-        MazeController.Instance.Next();
+        MazeController.instance.Next();
       }
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
       base.OnCollisionEnter2D(other);
-      
-      hpBar.fillAmount = (float)Hp / maxHp;
+
+      hpBar.fillAmount = (float) Hp / maxHp;
       if (Hp <= 0) {
-        SceneManager.LoadScene("Gameover");
-        Player.Instance = null;
-        MazeController.Instance = null;
-        EffectController.Instance = null;
+        SceneController.ChangeSceneWithEffect("Gameover", new Effect(EffectType.FadeOut, 2f),
+          new Effect(EffectType.FadeIn, 0.6f), 0.2f);
       }
     }
 

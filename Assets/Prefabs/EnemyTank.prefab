@@ -79,7 +79,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 15
+  m_Radius: 30
 --- !u!114 &8281172842011070023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,15 +246,15 @@ MonoBehaviour:
   leftWheel: {fileID: 6281901481849636413}
   rightWheel: {fileID: 6281901482222452006}
   head: {fileID: 6281901482168057532}
-  moveSpeed: 0.2
+  moveSpeed: 1
   bulletObject: {fileID: 4678474034535720471, guid: c8aaae86f37f18e43b1dc6fff9b6ab25, type: 3}
   bulletMaxCount: 1
   bulletStartPosition: {fileID: 1534077466}
-  bulletSpeed: 2
+  bulletSpeed: 7
   bulletDamage: 1
-  maxHp: 4
+  maxHp: 12
   isEnabled: 0
-  fireSecond: 5
+  fireSecond: 2
 --- !u!1 &6281901481849636413
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Camera {
   public class MainCameraController : MonoBehaviour {
-    public static MainCameraController Instance { get; private set; }
+    public static MainCameraController instance { get; private set; }
 
     public Transform target;
 
@@ -12,7 +12,7 @@ namespace Camera {
     public bool _enabled = true;
 
     private void Awake() {
-      if (Instance == null) Instance = this;
+      if (instance == null) instance = this;
       else Destroy(gameObject);
     }
 
@@ -21,6 +21,10 @@ namespace Camera {
         Vector3 targetPos = new Vector3(target.position.x, target.position.y, this.transform.position.z);
         transform.position = Vector3.Lerp(transform.position, targetPos, smoothing);
       }
+    }
+
+    private void OnDestroy() {
+      if (instance == this) instance = null;
     }
   }
 }

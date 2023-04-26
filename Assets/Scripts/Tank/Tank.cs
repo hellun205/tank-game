@@ -141,8 +141,11 @@ namespace Tank {
     }
 
     protected void OnCollisionEnter2D(Collision2D col) {
-      if (col.gameObject.tag == "Bullet" && !bullets.Contains(col.gameObject.GetComponent<Bullet>())) {
-        hp -= col.gameObject.GetComponent<Bullet>().damage;
+      if (col.gameObject.tag != "Bullet") return;
+      
+      var bullet = col.gameObject.GetComponent<Bullet>();
+      if (!bullets.Contains(bullet)) {
+        hp -= bullet.damage;
       }
     }
 

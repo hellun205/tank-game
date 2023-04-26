@@ -18,7 +18,7 @@ namespace Tank {
 
     private void Start() {
       base.Start();
-      StartCoroutine(FireCoroutine());
+      InvokeRepeating("Fire", fireSecond, fireSecond);
     }
     
     private void FixedUpdate() {
@@ -30,26 +30,22 @@ namespace Tank {
       base.Update();
     }
 
-    IEnumerator FireCoroutine() {
-      start:
-      yield return new WaitForSeconds(fireSecond);
-      if (isEnabled) Fire();
-      goto start;
+    private new void Fire() {
+      if (isEnabled) base.Fire();
     }
     
     private void MovingUpdate() {
       if (isEnabled) {
         currentMoveSpeed = moveSpeed;
-        // currentRotateSpeed = rotateSpeed * Input.GetAxisRaw("Horizontal");
         
         // 플레이어 쫓기 (회전)
-        angle = Mathf.Atan2(Player.Instance.transform.position.y - transform.position.y,
-                  Player.Instance.transform.position.x - transform.position.x)
+        // 참고: https://mentum.tistory.com/227
+        angle = Mathf.Atan2(Player.instance.transform.position.y - transform.position.y,
+                  Player.instance.transform.position.x - transform.position.x)
                 * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Lerp(transform.rotation,Quaternion.Euler(0, 0, angle - 90), 0.2f);
+        transform.rotation = Quaternion.Lerp(transform.rotation,Quaternion.Euler(0, 0, angle - 90), 0.1f);
 
         transform.Translate(Vector3.up * currentMoveSpeed * Time.deltaTime);
-        transform.Rotate(0f, 0f, -currentRotateSpeed * Time.deltaTime);
       }
     }
 

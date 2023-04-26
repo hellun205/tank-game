@@ -22,7 +22,7 @@ namespace Tank {
 
     private void Update() {
       if (IsShooting) {
-        transform.Translate(Vector3.up * speed * Time.deltaTime);
+        transform.Translate(Vector3.up * speed * Time.deltaTime * Time.timeScale);
       }
     }
 

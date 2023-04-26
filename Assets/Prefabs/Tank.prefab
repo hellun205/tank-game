@@ -79,7 +79,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 15
+  m_Radius: 30
 --- !u!114 &8281172842011070023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -248,13 +248,13 @@ MonoBehaviour:
   head: {fileID: 6281901482168057532}
   moveSpeed: 2.5
   bulletObject: {fileID: 4678474034535720471, guid: c8aaae86f37f18e43b1dc6fff9b6ab25, type: 3}
-  bulletMaxCount: 5
+  bulletMaxCount: 4
   bulletStartPosition: {fileID: 1534077466}
   bulletSpeed: 7
-  bulletDamage: 1
+  bulletDamage: 2
   maxHp: 15
-  rotateSpeed: 125
-  fireKey: 32
+  _rotateSpeed: 120
+  _fireKey: 32
   warpKey: 32
   canWarp: 1
   hpBar: {fileID: 0}

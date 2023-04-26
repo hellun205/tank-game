@@ -2,7 +2,7 @@
 
 namespace Maze {
   public static class DirectionExts {
-    public static Quaternion GetQuaternion(this Direction dir) {
+    public static Quaternion ToQuaternion(this Direction dir) {
       switch (dir) {
         default:
         case Direction.Up:
