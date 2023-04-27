@@ -15,6 +15,10 @@ namespace Maze {
   public class MazeController : MonoBehaviour {
     public static MazeController instance { get; set; }
 
+    public const string EnemyPosition = "spawn_enemy";
+    public const string StartPosition = "start_hole";
+    public const string NextPosition = "next_stage_hole";
+
     private Player _tank;
 
     public List<Room> _rooms { get; set; } = new List<Room>();
@@ -34,7 +38,7 @@ namespace Maze {
       else Destroy(gameObject);
 
       foreach (var stage in stages) {
-        _rooms.Add(new Room(stage.tilemap, stage.startDirection));
+        _rooms.Add(new Room(stage, stage.tilemap, stage.startDirection));
         Debug.Log(stage.tilemap.gameObject.name);
       }
       
@@ -68,14 +72,15 @@ namespace Maze {
       SetText(InfoType.Stage, $"Stage: {currentIndex + 1}");
 
       var room = GetCurrentRoom();
+      room.tilemap.gameObject.SetActive(true);
       if (!room.isReady) {
-        room.startPosition = room.tilemap.FindTiles(tile => tile.name == "start_hole")[0].position;
-        room.endPositions = room.tilemap.FindTiles(tile => tile.name == "next_stage_hole")
+        room.startPosition = room.tilemap.FindTiles(tile => tile.name == StartPosition)[0].position;
+        room.endPositions = room.tilemap.FindTiles(tile => tile.name == NextPosition)
           .Select(tile => tile.position).ToArray();
         room.isReady = true;
       }
-      room.tilemap.gameObject.SetActive(true);
       
+      room.mazeStage.SpawnEnemies();
       _tank.transform.SetPositionAndRotation(room.tilemap.CellToWorld(room.startPosition) +
                                              new Vector3(0.5f, 0.5f, 0f), room.startDirection.ToQuaternion());
 

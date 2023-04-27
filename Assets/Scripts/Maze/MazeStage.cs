@@ -21,8 +21,8 @@ namespace Maze {
     private void Awake() {
       tilemap = GetComponent<Tilemap>();
     }
-    
-    private void Start() {
+
+    public void SpawnEnemies() {
       if (Enemies.Count > 0) {
         foreach (var enemy in Enemies) {
           Destroy(enemy);
@@ -30,9 +30,9 @@ namespace Maze {
 
         Enemies.Clear();
       }
-      tilemap.FindTilesAndAction(tile => tile.name == "spawn_enemy", tile => {
+      tilemap.FindTilesAndAction(tile => tile.name == MazeController.EnemyPosition, tile => {
         Enemies.Add(Instantiate(enemy, tilemap.CellToWorld(tile.position) + new Vector3(0.5f, 0.5f, 0f),
-               enemy.transform.rotation));
+          enemy.transform.rotation));
       });
     }
   }
