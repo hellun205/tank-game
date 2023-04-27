@@ -3,28 +3,44 @@ using UnityEngine;
 
 namespace Camera {
   public class MainCameraController : MonoBehaviour {
-    public static MainCameraController instance { get; private set; }
+    private static MainCameraController instance { get; set; }
 
-    public Transform target;
+    private Transform _target;
 
-    public float smoothing = 0.05f;
+    private float _smoothing = 0.05f;
 
-    public bool _enabled = true;
+    private bool _enabled = false;
 
     private void Awake() {
       if (instance == null) instance = this;
       else Destroy(gameObject);
+      DontDestroyOnLoad(gameObject);
     }
 
     private void FixedUpdate() {
       if (_enabled) {
-        Vector3 targetPos = new Vector3(target.position.x, target.position.y, this.transform.position.z);
-        transform.position = Vector3.Lerp(transform.position, targetPos, smoothing);
+        var targetPos = new Vector3(_target.position.x, _target.position.y, this.transform.position.z);
+        transform.position = Vector3.Lerp(transform.position, targetPos, _smoothing);
       }
     }
 
     private void OnDestroy() {
       if (instance == this) instance = null;
+    }
+    
+    public static Transform target {
+      get => instance._target;
+      set => instance._target = value;
+    }
+
+    public static float smoothing {
+      get => instance._smoothing;
+      set => instance._smoothing = value;
+    }
+
+    public static bool isEnabled {
+      get => instance._enabled;
+      set => instance._enabled = value;
     }
   }
 }

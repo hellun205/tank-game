@@ -19,9 +19,7 @@ namespace Maze {
     public const string StartPosition = "start_hole";
     public const string NextPosition = "next_stage_hole";
 
-    private Player _tank;
-
-    public List<Room> _rooms { get; set; } = new List<Room>();
+    private List<Room> _rooms { get; set; } = new List<Room>();
 
     [SerializeField]
     private MazeStage[] stages;
@@ -39,7 +37,7 @@ namespace Maze {
 
       foreach (var stage in stages) {
         _rooms.Add(new Room(stage, stage.tilemap, stage.startDirection));
-        Debug.Log(stage.tilemap.gameObject.name);
+        Debug.Log($"stage load success: {stage.tilemap.gameObject.name}");
       }
       
       ScreenEffectController.startAlpha = 1f;
@@ -81,7 +79,7 @@ namespace Maze {
       }
       
       room.mazeStage.SpawnEnemies();
-      _tank.transform.SetPositionAndRotation(room.tilemap.CellToWorld(room.startPosition) +
+      Player.instance.transform.SetPositionAndRotation(room.tilemap.CellToWorld(room.startPosition) +
                                              new Vector3(0.5f, 0.5f, 0f), room.startDirection.ToQuaternion());
 
       Invoke("AfterPrepare", 0.5f);
@@ -89,7 +87,7 @@ namespace Maze {
 
     private void AfterPrepare() {
       ScreenEffectController.ShowEffect(new Effect(EffectType.FadeIn, 0.7f));
-      _tank.canWarp = true;
+      Player.instance.canWarp = true;
     }
 
     private void Next() {
@@ -117,14 +115,7 @@ namespace Maze {
 
     public static void MoveMap(int index) => instance.Move(index);
 
-    public static void SetUIText(InfoType type, string text) => instance.SetText(type, text);
-
     public static int currentMapIndex => instance.currentIndex;
-
-    public static Player playerTank {
-      get => instance._tank;
-      set => instance._tank = value;
-    }
 
     public static List<Room> rooms {
       get => instance._rooms;

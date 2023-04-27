@@ -19,8 +19,7 @@ namespace ScreenEffect {
     }
 
     private void OnDestroy() {
-      if (instance == this)
-        instance = null;
+      if (instance == this) instance = null;
     }
   }
 }

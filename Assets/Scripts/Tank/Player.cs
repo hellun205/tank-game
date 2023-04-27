@@ -37,9 +37,8 @@ namespace Tank {
 
     private void Start() {
       base.Start();
-      MainCameraController.instance.target = transform;
-      // ScreenEffectController.ShowEffect(new Effect(EffectType.ImmediatelyOut));
-      MazeController.playerTank = this;
+      MainCameraController.target = transform;
+      MainCameraController.isEnabled = true;
       MazeController.MoveMap(0);
     }
 
@@ -83,6 +82,7 @@ namespace Tank {
 
       hpBar.fillAmount = (float) Hp / maxHp;
       if (Hp <= 0) {
+        MainCameraController.isEnabled = false;
         SceneController.ChangeSceneWithEffect("Gameover", new Effect(EffectType.FadeOut, 2f),
           new Effect(EffectType.FadeIn, 0.6f), 0.2f);
       }
