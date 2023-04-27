@@ -65,7 +65,7 @@ namespace Tank {
       spriteRenderers.Add(TankChildrens.LeftWheel, leftWheel.GetComponent<SpriteRenderer>());
       spriteRenderers.Add(TankChildrens.RightWheel, rightWheel.GetComponent<SpriteRenderer>());
 
-      SetBulletMaxCount(bulletMaxCount);
+      CreateBulletObjects(bulletMaxCount);
     }
 
     protected void Start() {
@@ -116,14 +116,8 @@ namespace Tank {
       }
     }
 
-    public void SetBulletMaxCount(int count) {
-      if (bullets.Count > 0) {
-        foreach (var bullet in bullets) {
-          Destroy(bullet.gameObject);
-        }
-
-        bullets.Clear();
-      }
+    public void CreateBulletObjects(int count) {
+      DestroyAllBullets();
 
       bulletMaxCount = count;
       for (var i = 0; i < bulletMaxCount; i++) {
@@ -142,7 +136,7 @@ namespace Tank {
 
     protected void OnCollisionEnter2D(Collision2D col) {
       if (col.gameObject.tag != "Bullet") return;
-      
+
       var bullet = col.gameObject.GetComponent<Bullet>();
       if (!bullets.Contains(bullet)) {
         hp -= bullet.damage;
@@ -158,13 +152,19 @@ namespace Tank {
       }
     }
 
-    protected void OnDestroy() {
+    protected void OnDestroy() => DestroyAllBullets();
+
+    protected void DestroyAllBullets() {
+      if (bullets.Count == 0) return;
+
       foreach (var obj in bullets) {
         try {
           Destroy(obj.gameObject);
         } catch {
         }
       }
+
+      bullets.Clear();
     }
   }
 }

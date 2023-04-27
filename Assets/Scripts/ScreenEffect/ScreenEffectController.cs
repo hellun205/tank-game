@@ -6,58 +6,58 @@ using UnityEngine.UI;
 
 namespace ScreenEffect {
   public class ScreenEffectController : MonoBehaviour {
-    private static ScreenEffectController _instance { get; set; }
+    private static ScreenEffectController instance { get; set; }
 
     private Image _image;
     
     public static Image image {
-      get => _instance._image;
+      get => instance._image;
       set {
-        _instance._image = value;
-        _instance.ChangeAlpha(startAlpha);
+        instance._image = value;
+        instance.ChangeAlpha(startAlpha);
       }
     }
 
-    private bool _isActivating;
+    private bool isActivating;
 
-    private EffectType _state;
+    private EffectType state;
 
     [CanBeNull]
-    private Action _tmpCallback;
+    private Action tmpCallback;
 
-    private float _speed;
+    private float speed;
 
     private float _startAlpha = 0f;
 
-    private Effect _tmpEffect;
+    private Effect tmpEffect;
 
-    private float _tmpCallbackDelay;
+    private float tmpCallbackDelay;
 
     
     public static float startAlpha {
-      get => _instance._startAlpha;
-      set => _instance._startAlpha = value;
+      get => instance._startAlpha;
+      set => instance._startAlpha = value;
     }
 
     private void Awake() {
-      if (_instance == null) _instance = this;
+      if (instance == null) instance = this;
       else Destroy(gameObject);
       DontDestroyOnLoad(gameObject);
     }
 
     private void Update() {
-      if (_isActivating) {
-        switch (_state) {
+      if (isActivating) {
+        switch (state) {
           case EffectType.FadeIn:
             if (_image.color.a > 0)
-              ChangeAlpha(_image.color.a - (Time.deltaTime * _speed)); 
+              ChangeAlpha(_image.color.a - (Time.deltaTime * speed)); 
             else
               End();
             break;
 
           case EffectType.FadeOut:
             if (_image.color.a < 1) 
-              ChangeAlpha(_image.color.a + (Time.deltaTime * _speed));
+              ChangeAlpha(_image.color.a + (Time.deltaTime * speed));
             else
               End();
             break;
@@ -72,21 +72,21 @@ namespace ScreenEffect {
     }
 
     private void ShowInv(Effect effect, [CanBeNull] Action callback = null, float callbackDelay = 0f) {
-      _tmpEffect = effect;
-      _tmpCallback = callback;
-      _tmpCallbackDelay = _tmpCallbackDelay;
+      tmpEffect = effect;
+      tmpCallback = callback;
+      tmpCallbackDelay = tmpCallbackDelay;
       Invoke("Show", effect.delay);
     }
 
     private void Show() {
-      if (!_isActivating) {
+      if (!isActivating) {
         var activeAnim = true;
         Color tmpColor;
 
-        _speed = _tmpEffect.speed;
+        speed = tmpEffect.speed;
         tmpColor = _image.color;
 
-        switch (_tmpEffect.type) {
+        switch (tmpEffect.type) {
           case EffectType.FadeIn:
             ChangeAlpha(1f);
             break;
@@ -109,26 +109,26 @@ namespace ScreenEffect {
             throw new NotImplementedException();
         }
 
-        _state = _tmpEffect.type;
-        _isActivating = activeAnim;
+        state = tmpEffect.type;
+        isActivating = activeAnim;
 
-        if (_tmpEffect.type == EffectType.ImmediatelyOut || _tmpEffect.type == EffectType.ImmediatelyIn)
+        if (tmpEffect.type == EffectType.ImmediatelyOut || tmpEffect.type == EffectType.ImmediatelyIn)
           End();
       }
     }
 
     private void End() {
-      _isActivating = false;
-      Invoke("InvokeCallback", _tmpCallbackDelay);
+      isActivating = false;
+      Invoke("InvokeCallback", tmpCallbackDelay);
     }
     
-    private void InvokeCallback() => _tmpCallback?.Invoke();
+    private void InvokeCallback() => tmpCallback?.Invoke();
 
     private void ForceExit() {
-      if (_isActivating) {
-        _isActivating = false;
+      if (isActivating) {
+        isActivating = false;
 
-        switch (_state) {
+        switch (state) {
           case EffectType.FadeIn:
             ChangeAlpha(0f);
             break;
@@ -143,8 +143,12 @@ namespace ScreenEffect {
     }
 
     public static void ShowEffect(Effect effect, [CanBeNull] Action callback = null, float callbackDelay = 0f) =>
-      _instance.ShowInv(effect, callback);
+      instance.ShowInv(effect, callback);
 
-    public static void ExitEffect() => _instance.ForceExit();
+    public static void ExitEffect() => instance.ForceExit();
+
+    private void OnDestroy() {
+      if (instance == this) instance = null;
+    }
   }
 }

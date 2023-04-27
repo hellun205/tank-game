@@ -1,4 +1,5 @@
-﻿using Camera;
+﻿using System.Linq;
+using Camera;
 using ScreenEffect;
 using Maze;
 using Scene;
@@ -6,6 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Utils;
 
 namespace Tank {
   public class Player : Tank {
@@ -37,8 +39,8 @@ namespace Tank {
       base.Start();
       MainCameraController.instance.target = transform;
       // ScreenEffectController.ShowEffect(new Effect(EffectType.ImmediatelyOut));
-      MazeController.instance.tank = this;
-      MazeController.instance.Move(0);
+      MazeController.playerTank = this;
+      MazeController.MoveMap(0);
     }
 
     private void FixedUpdate() {
@@ -65,12 +67,14 @@ namespace Tank {
     }
 
     private void WarpUpdate() {
-      if (!Input.GetKeyDown(warpKey)) return;
+      if (!Input.GetKeyDown(warpKey) || !canWarp) return;
 
-      var room = MazeController.instance.GetCurrentRoom();
-      if (canWarp && room.Tilemap.WorldToCell(transform.position) == room.EndPosition) {
+      var room = MazeController.currentMap;
+      var playerPos = room.tilemap.WorldToCell(transform.position);
+      
+      if (room.endPositions.Contains(playerPos)) {
         canWarp = false;
-        MazeController.instance.Next();
+        MazeController.MoveNextMap();
       }
     }
 
@@ -86,6 +90,7 @@ namespace Tank {
 
     private void OnDestroy() {
       base.OnDestroy();
+      if (instance == this) instance = null;
     }
   }
 }

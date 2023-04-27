@@ -22,9 +22,9 @@ namespace Scene {
       DontDestroyOnLoad(gameObject);
     }
 
-    private void Change(string name) {
+    private void Change(string name, float changeDelay = 0f) {
       changeSceneName = name;
-      LoadScene();
+      Invoke("LoadScene", changeDelay);
     }
 
     private void ChangeWithEffect(string name, Effect beforeEffect, Effect afterEffect, float changeDelay = 0f) {
@@ -49,7 +49,7 @@ namespace Scene {
       ScreenEffectController.ShowEffect(effect);
     }
 
-    public static void ChangeScene(string name) => instance.Change(name);
+    public static void ChangeScene(string name, float changeDelay = 0f) => instance.Change(name, changeDelay);
 
     public static void ChangeSceneWithEffect
       (string name, Effect beforeEffect, Effect afterEffect, float changeDelay = 0f) =>
